@@ -18,6 +18,7 @@
  */
 package org.jenkinsci.plugins.testrail;
 
+import hudson.EnvVars;
 import hudson.Extension;
 import hudson.FilePath;
 import hudson.Launcher;
