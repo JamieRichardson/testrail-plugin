@@ -179,7 +179,7 @@ public class TestRailNotifier extends Notifier implements SimpleBuildStep {
             if (testrail.doesSuiteHaveOpenTestRuns(testCases.getProjectId(), testCases.getSuiteId())) {
                 runId = testrail.getOpenTestRunId(testCases.getProjectId(), testCases.getSuiteId());
             } else {
-                runId = testrail.addRun(testCases.getProjectId(), testCases.getSuiteId(), milestoneId, runComment); // TODO add logic to check for an open run and add results over if open run exists
+                runId = testrail.addRun(testCases.getProjectId(), testCases.getSuiteId(), milestoneId, runComment);
             }
             final EnvVars env = run.getEnvironment(taskListener);
             String expandedEnvDetails = env.expand(getEnvDetails());

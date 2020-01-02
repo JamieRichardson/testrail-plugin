@@ -298,7 +298,8 @@ public class TestRailClient {
 
     public Case addCase(Testcase caseToAdd, int sectionId)
             throws IOException, TestRailException {
-        JSONObject payload = new JSONObject().put("title", caseToAdd.getName());
+        final String cleanTestCaseName = caseToAdd.getName().replaceAll("\\d:", ""); //  Get rid of index in paramaterized tests
+        JSONObject payload = new JSONObject().put("title", cleanTestCaseName);
         payload.put("custom_automation_type", 1); // Test is automated if it's being added from jenkins plugin
         if (!StringUtils.isEmpty(caseToAdd.getRefs())) {
             payload.put("refs", caseToAdd.getRefs());
