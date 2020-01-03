@@ -33,7 +33,7 @@ public class Case {
     }
 
     public void setTitle(String title) {
-        this.title = title.replaceAll("\\d+:", "").trim();
+        this.title = title.replaceAll("\\d+(?=:)|(?<=\\/)[0-9]+(?=\\/)?", "•").trim();
     }
 
     public void setSectionId(int sectionId) { this.sectionId = sectionId; }
@@ -47,7 +47,7 @@ public class Case {
     }
 
     public String getTitle() {
-        return this.title.replaceAll("\\d+:", "");
+        return this.title.replaceAll("\\d+(?=:)|(?<=\\/)[0-9]+(?=\\/)?", "•");
     }
 
     public int getSectionId() { return this.sectionId; }

@@ -32,7 +32,7 @@ public class Testcase {
     private String refs;
 
     @XmlAttribute
-    public void setName(String name) { this.name = name.replaceAll("\\d+:", "").trim(); }
+    public void setName(String name) { this.name = name.replaceAll("\\d+(?=:)|(?<=\\/)[0-9]+(?=\\/)?", "•").trim(); }
     @XmlElement(name = "failure")
     public void setFailure(Failure failure) { this.failure = failure; }
     @XmlElement(name = "skipped")
@@ -42,7 +42,7 @@ public class Testcase {
     @XmlAttribute(name = "refs")
     public void setRefs(String refs) { this.refs = refs; }
 
-    public String getName() { return this.name.replaceAll("\\d+:", ""); }
+    public String getName() { return this.name.replaceAll("\\d+(?=:)|(?<=\\/)[0-9]+(?=\\/)?", "•"); }
     public Failure getFailure() { return this.failure; }
     public Skipped getSkipped() { return this.skipped; }
     public Float getTime() { return this.time; }
