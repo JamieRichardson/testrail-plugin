@@ -248,23 +248,22 @@ public class TestRailNotifier extends Notifier implements SimpleBuildStep {
                     }
                 }
                 if (addResult) {
-	                CaseStatus caseStatus;
-	                Float caseTime = testcase.getTime();
-	                String caseComment = null;
-	                Failure caseFailure = testcase.getFailure();
-	                if (caseFailure != null) {
-	                    caseStatus = CaseStatus.FAILED;
-	                    caseComment = (caseFailure.getMessage() == null) ? caseFailure.getText() : caseFailure.getMessage() + "\n" + caseFailure.getText();
-	                } else if (testcase.getSkipped() != null) {
-	                    caseStatus = CaseStatus.UNTESTED;
-	                } else {
-	                    caseStatus = CaseStatus.PASSED;
-	                }
-
-	                if (caseStatus != CaseStatus.UNTESTED){
-	                    results.addResult(new Result(caseId, caseStatus, caseComment, caseTime));
-	                }
-	            }
+                    CaseStatus caseStatus;
+                    Float caseTime = testcase.getTime();
+                    String caseComment = null;
+                    Failure caseFailure = testcase.getFailure();
+                    if (caseFailure != null) {
+                        caseStatus = CaseStatus.FAILED;
+                        caseComment = (caseFailure.getMessage() == null) ? caseFailure.getText() : caseFailure.getMessage() + "\n" + caseFailure.getText();
+                    } else if (testcase.getSkipped() != null) {
+                        caseStatus = CaseStatus.SKIPPED;
+                    } else {
+                        caseStatus = CaseStatus.PASSED;
+                    }
+                    if (caseStatus != CaseStatus.UNTESTED) {
+                        results.addResult(new Result(caseId, caseStatus, caseComment, caseTime));
+                    }
+                }
             }
         }
 
