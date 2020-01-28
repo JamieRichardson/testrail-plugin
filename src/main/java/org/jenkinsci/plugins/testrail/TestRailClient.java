@@ -308,13 +308,13 @@ public class TestRailClient {
         return c;
     }
 
-    public TestRailResponse addResultsForCases(int runId, Results results)
+    public TestRailResponse addResultsForCases(int runId, Results results, String environment)
             throws IOException, TestRailException {
         JSONArray a = new JSONArray();
         for (int i = 0; i < results.getResults().size(); i++) {
             JSONObject o = new JSONObject();
             Result r = results.getResults().get(i);
-            o.put("case_id", r.getCaseId()).put("status_id", r.getStatus().getValue()).put("comment", r.getComment()).put("elapsed", r.getElapsedTimeString());
+            o.put("case_id", r.getCaseId()).put("status_id", r.getStatus().getValue()).put("comment", r.getComment()).put("elapsed", r.getElapsedTimeString()).put("version", environment);
             a.put(o);
         }
 
@@ -329,6 +329,28 @@ public class TestRailClient {
         String payload = new JSONObject().put("suite_id", suiteId).put("description", description).put("milestone_id", milestoneID).toString();
         String body = httpPost("index.php?/api/v2/add_run/" + projectId, payload).getBody();
         return new JSONObject(body).getInt("id");
+    }
+
+    public boolean doesSuiteHaveOpenTestRuns(int projectId, int suiteId) throws IOException {
+        String body = httpGet("index.php?/api/v2/get_runs/" + projectId + "&is_completed=0&suite_id=" + suiteId).getBody();
+        JSONArray json;
+        try {
+            json = new JSONArray(body);
+        } catch (JSONException e) {
+            json = null;
+        }
+        return json != null && json.length() > 0;
+    }
+
+    public int getOpenTestRunId(int projectId, int suiteId) throws IOException {
+        String body = httpGet("index.php?/api/v2/get_runs/" + projectId + "&is_completed=0&suite_id=" + suiteId).getBody();
+        JSONArray json;
+        try {
+            json = new JSONArray(body);
+        } catch (JSONException e) {
+            return 0;
+        }
+        return json.getJSONObject(0).getInt("id");
     }
 
     public Milestone[] getMilestones(int projectId) throws IOException, ElementNotFoundException {
@@ -358,11 +380,11 @@ public class TestRailClient {
         }
         throw new ElementNotFoundException("Milestone id not found.");
     }
-    //Don't want to close run after tests run completes
-//    public boolean closeRun(int runId)
-//            throws IOException, TestRailException {
-//        String payload = "";
-//        int status = httpPost("index.php?/api/v2/close_run/" + runId, payload).getStatus();
-//        return (200 == status);
-//    }
+
+    public boolean closeRun(int runId)
+            throws IOException, TestRailException {
+        String payload = "";
+        int status = httpPost("index.php?/api/v2/close_run/" + runId, payload).getStatus();
+        return (200 == status);
+    }
 }

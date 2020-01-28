@@ -14,7 +14,13 @@
     <f:textbox />
   </f:entry>
   <f:entry title="Create new testcases" field="createNewTestcases">
-    <f:checkbox/>
+    <f:checkbox />
+  </f:entry>
+  <f:entry title="Close test run" field="closeTestRun">
+    <f:checkbox />
+  </f:entry>
+  <f:entry title="Environment Details" field="envDetails">
+    <f:textbox />
   </f:entry>
 
   <f:block>
