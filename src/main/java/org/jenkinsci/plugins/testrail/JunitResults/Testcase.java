@@ -39,7 +39,7 @@ public class Testcase {
     @XmlElement(name = "skipped")
     public void setSkipped(Skipped skipped) { this.skipped = skipped; }
     @XmlElement(name = "error")
-    public void getJunitError(JunitError junitError) { this.junitError = junitError; }
+    public void setJunitError(JunitError junitError) { this.junitError = junitError; }
     @XmlAttribute(name = "time")
     public void setTime(Float time) { this.time = time; }
     @XmlAttribute(name = "refs")

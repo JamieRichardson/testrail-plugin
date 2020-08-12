@@ -32,7 +32,7 @@ public class Failure {
     @XmlAttribute
     public void setType(String type) { this.type = type; }
     @XmlAttribute
-    public void  setMessage(String message) { this.message = message; }
+    public void setMessage(String message) { this.message = message; }
     @XmlValue
     public void setText(String text) { this.text = text; }
 

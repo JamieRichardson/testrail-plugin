@@ -84,34 +84,28 @@ public class TestRailNotifier extends Notifier implements SimpleBuildStep {
     @DataBoundSetter
     public void setTestrailProject(int project) { this.testrailProject = project; }
     public int getTestrailProject() { return this.testrailProject; }
-
     @DataBoundSetter
     public void setTestrailSuite(int suite) { this.testrailSuite = suite; }
     public int getTestrailSuite() { return this.testrailSuite; }
-
     @DataBoundSetter
     public void setJunitResultsGlob(String glob) { this.junitResultsGlob = glob; }
     public String getJunitResultsGlob() { return this.junitResultsGlob; }
     public String getTestrailMilestone() { return this.testrailMilestone; }
-
     @DataBoundSetter
     public void setTestrailMilestone(String milestone) { this.testrailMilestone = milestone; }
-
     @DataBoundSetter
     public void setEnableMilestone(boolean mstone) { this.enableMilestone = mstone; }
     public boolean getEnableMilestone() { return this.enableMilestone; }
-
     @DataBoundSetter
     public void setCreateNewTestcases(boolean newcases) { this.createNewTestcases = newcases; }
     public boolean getCreateNewTestcases() { return this.createNewTestcases;    }
-
     @DataBoundSetter
     public void setCloseTestRun(boolean closeTestRun) { this.closeTestRun = closeTestRun; }
     public boolean getCloseTestRun() { return this.closeTestRun; }
-
     @DataBoundSetter
     public void setEnvDetails(String details) { this.envDetails = details; }
     public String getEnvDetails() { return this.envDetails; }
+
 
     @Override
     public void perform(@Nonnull hudson.model.Run<?, ?> run, @Nonnull FilePath workspace, @Nonnull Launcher launcher, @Nonnull TaskListener taskListener) throws InterruptedException, IOException {
