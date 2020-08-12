@@ -1,5 +1,4 @@
 /**
- *
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
  * distributed with this work for additional information
@@ -7,9 +6,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -39,6 +38,7 @@ import javax.xml.bind.JAXBException;
 import jenkins.tasks.SimpleBuildStep;
 import net.sf.json.JSONObject;
 import org.jenkinsci.Symbol;
+import org.jenkinsci.plugins.testrail.JunitResults.JunitError;
 import org.jenkinsci.plugins.testrail.JunitResults.Failure;
 import org.jenkinsci.plugins.testrail.JunitResults.JUnitResults;
 import org.jenkinsci.plugins.testrail.JunitResults.Testcase;
@@ -82,33 +82,80 @@ public class TestRailNotifier extends Notifier implements SimpleBuildStep {
     }
 
     @DataBoundSetter
-    public void setTestrailProject(int project) { this.testrailProject = project;}
-    public int getTestrailProject() { return this.testrailProject; }
+    public void setTestrailProject(int project) {
+        this.testrailProject = project;
+    }
+
+    public int getTestrailProject() {
+        return this.testrailProject;
+    }
+
     @DataBoundSetter
-    public void setTestrailSuite(int suite) { this.testrailSuite = suite; }
-    public int getTestrailSuite() { return this.testrailSuite; }
+    public void setTestrailSuite(int suite) {
+        this.testrailSuite = suite;
+    }
+
+    public int getTestrailSuite() {
+        return this.testrailSuite;
+    }
+
     @DataBoundSetter
-    public void setJunitResultsGlob(String glob) { this.junitResultsGlob = glob; }
-    public String getJunitResultsGlob() { return this.junitResultsGlob; }
-    public String getTestrailMilestone() { return this.testrailMilestone; }
+    public void setJunitResultsGlob(String glob) {
+        this.junitResultsGlob = glob;
+    }
+
+    public String getJunitResultsGlob() {
+        return this.junitResultsGlob;
+    }
+
+    public String getTestrailMilestone() {
+        return this.testrailMilestone;
+    }
+
     @DataBoundSetter
-    public void setTestrailMilestone(String milestone) { this.testrailMilestone = milestone; }
+    public void setTestrailMilestone(String milestone) {
+        this.testrailMilestone = milestone;
+    }
+
     @DataBoundSetter
-    public void setEnableMilestone(boolean mstone) {this.enableMilestone = mstone; }
-    public boolean getEnableMilestone() { return  this.enableMilestone; }
+    public void setEnableMilestone(boolean mstone) {
+        this.enableMilestone = mstone;
+    }
+
+    public boolean getEnableMilestone() {
+        return this.enableMilestone;
+    }
+
     @DataBoundSetter
-    public void setCreateNewTestcases(boolean newcases) {this.createNewTestcases = newcases; }
-    public boolean getCreateNewTestcases() { return  this.createNewTestcases; }
+    public void setCreateNewTestcases(boolean newcases) {
+        this.createNewTestcases = newcases;
+    }
+
+    public boolean getCreateNewTestcases() {
+        return this.createNewTestcases;
+    }
+
     @DataBoundSetter
-    public void setCloseTestRun(boolean closeTestRun) {this.closeTestRun = closeTestRun; }
-    public boolean getCloseTestRun() { return this.closeTestRun; }
+    public void setCloseTestRun(boolean closeTestRun) {
+        this.closeTestRun = closeTestRun;
+    }
+
+    public boolean getCloseTestRun() {
+        return this.closeTestRun;
+    }
+
     @DataBoundSetter
-    public void setEnvDetails(String details) {this.envDetails = details; }
-    public String getEnvDetails() {return this.envDetails; }
+    public void setEnvDetails(String details) {
+        this.envDetails = details;
+    }
+
+    public String getEnvDetails() {
+        return this.envDetails;
+    }
 
     @Override
     public void perform(@Nonnull hudson.model.Run<?, ?> run, @Nonnull FilePath workspace, @Nonnull Launcher launcher, @Nonnull TaskListener taskListener) throws InterruptedException, IOException {
-        TestRailClient  testrail = getDescriptor().getTestrailInstance();
+        TestRailClient testrail = getDescriptor().getTestrailInstance();
         testrail.setHost(getDescriptor().getTestrailHost());
         testrail.setUser(getDescriptor().getTestrailUser());
         testrail.setPassword(getDescriptor().getTestrailPassword());
@@ -161,7 +208,7 @@ public class TestRailNotifier extends Notifier implements SimpleBuildStep {
         }
         List<Testsuite> suites = actualJunitResults.getSuites();
         try {
-            for (Testsuite suite: suites) {
+            for (Testsuite suite : suites) {
                 results.merge(addSuite(suite, null, testCases));
             }
         } catch (Exception e) {
@@ -198,7 +245,7 @@ public class TestRailNotifier extends Notifier implements SimpleBuildStep {
             taskListener.getLogger().println("status: " + response.getStatus());
             taskListener.getLogger().println("body :\n" + response.getBody());
         }
-        if(getCloseTestRun()) {
+        if (getCloseTestRun()) {
             try {
                 testrail.closeRun(runId);
             } catch (Exception e) {
@@ -252,9 +299,13 @@ public class TestRailNotifier extends Notifier implements SimpleBuildStep {
                     Float caseTime = testcase.getTime();
                     String caseComment = null;
                     Failure caseFailure = testcase.getFailure();
+                    JunitError caseJunitError = testcase.getJunitError();
                     if (caseFailure != null) {
                         caseStatus = CaseStatus.FAILED;
                         caseComment = (caseFailure.getMessage() == null) ? caseFailure.getText() : caseFailure.getMessage() + "\n" + caseFailure.getText();
+                    } else if (caseJunitError != null) {
+                        caseStatus = CaseStatus.RETEST;
+                        caseComment = (caseJunitError.getMessage() == null) ? caseJunitError.getText() : caseJunitError.getMessage() + "\n" + caseJunitError.getText();
                     } else if (testcase.getSkipped() != null) {
                         caseStatus = CaseStatus.SKIPPED;
                     } else {
@@ -266,7 +317,6 @@ public class TestRailNotifier extends Notifier implements SimpleBuildStep {
                 }
             }
         }
-
         return results;
     }
 
@@ -275,7 +325,7 @@ public class TestRailNotifier extends Notifier implements SimpleBuildStep {
     // you don't have to do this.
     @Override
     public DescriptorImpl getDescriptor() {
-        return (DescriptorImpl)super.getDescriptor();
+        return (DescriptorImpl) super.getDescriptor();
     }
 
     public BuildStepMonitor getRequiredMonitorService() {
@@ -393,7 +443,7 @@ public class TestRailNotifier extends Notifier implements SimpleBuildStep {
                 testrail.setHost(testrailHost);
                 testrail.setUser(value);
                 testrail.setPassword(testrailPassword);
-                if (testrail.serverReachable() && !testrail.authenticationWorks()){
+                if (testrail.serverReachable() && !testrail.authenticationWorks()) {
                     return FormValidation.error("Invalid user/password combination.");
                 }
             }
@@ -411,7 +461,7 @@ public class TestRailNotifier extends Notifier implements SimpleBuildStep {
                 testrail.setHost(testrailHost);
                 testrail.setUser(testrailUser);
                 testrail.setPassword(value);
-                if (testrail.serverReachable() && !testrail.authenticationWorks()){
+                if (testrail.serverReachable() && !testrail.authenticationWorks()) {
                     return FormValidation.error("Invalid user/password combination.");
                 }
             }
@@ -455,16 +505,39 @@ public class TestRailNotifier extends Notifier implements SimpleBuildStep {
             // ^Can also use req.bindJSON(this, formData);
             //  (easier when there are many fields; need set* methods for this, like setTestrailHost)
             save();
-            return super.configure(req,formData);
+            return super.configure(req, formData);
         }
 
-        public void setTestrailHost(String host) { this.testrailHost = host; }
-        public String getTestrailHost() { return testrailHost; }
-        public void setTestrailUser(String user) { this.testrailUser = user; }
-        public String getTestrailUser() { return testrailUser; }
-        public void setTestrailPassword(String password) { this.testrailPassword = password; }
-        public String getTestrailPassword() { return testrailPassword; }
-        public void setTestrailInstance(TestRailClient trc) { testrail = trc; }
-        public TestRailClient getTestrailInstance() { return testrail; }
+        public void setTestrailHost(String host) {
+            this.testrailHost = host;
+        }
+
+        public String getTestrailHost() {
+            return testrailHost;
+        }
+
+        public void setTestrailUser(String user) {
+            this.testrailUser = user;
+        }
+
+        public String getTestrailUser() {
+            return testrailUser;
+        }
+
+        public void setTestrailPassword(String password) {
+            this.testrailPassword = password;
+        }
+
+        public String getTestrailPassword() {
+            return testrailPassword;
+        }
+
+        public void setTestrailInstance(TestRailClient trc) {
+            testrail = trc;
+        }
+
+        public TestRailClient getTestrailInstance() {
+            return testrail;
+        }
     }
 }
