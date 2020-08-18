@@ -28,6 +28,7 @@ public class Testcase {
     private String name;
     private Failure failure;
     private Skipped skipped;
+    private JunitError junitError;
     private Float time;
     private String refs;
 
@@ -37,6 +38,8 @@ public class Testcase {
     public void setFailure(Failure failure) { this.failure = failure; }
     @XmlElement(name = "skipped")
     public void setSkipped(Skipped skipped) { this.skipped = skipped; }
+    @XmlElement(name = "error")
+    public void setJunitError(JunitError junitError) { this.junitError = junitError; }
     @XmlAttribute(name = "time")
     public void setTime(Float time) { this.time = time; }
     @XmlAttribute(name = "refs")
@@ -45,6 +48,7 @@ public class Testcase {
     public String getName() { return this.name.replaceAll("\\d+(?=:)|(?<=\\/)[0-9]+(?=\\/)?", "•"); }
     public Failure getFailure() { return this.failure; }
     public Skipped getSkipped() { return this.skipped; }
+    public JunitError getJunitError() { return this.junitError; }
     public Float getTime() { return this.time; }
     public String getRefs() { return this.refs; }
 }
