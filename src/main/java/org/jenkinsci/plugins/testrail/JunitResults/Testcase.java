@@ -57,35 +57,4 @@ public class Testcase {
     public String getRefs() {
         return this.refs;
     }
-
-
-//    public static void main(String[] args) {
-//        Testcase tc = new Testcase();
-//        tc.setTime("1,075.732");
-//        //tc.getElapsedTimeString
-//        Result jr = new Result(123, CaseStatus.FAILED, "", tc.getTime());
-//        System.out.println(jr.getElapsedTimeString());
-//    }
-
-
-//    public String cleanTimeFormat(String time) {
-//        String timeToClean = time;
-//        if (timeToClean !=null) {
-//            timeToClean.replace(",", "");
-//            try {
-//                return Float.parseFloat(timeToClean);
-//            } catch (NumberFormatException e) {
-//                try {
-//                    return new DecimalFormat().parse(timeToClean).floatValue();
-//                } catch (ParseException x) {
-//                    return 0.0f;
-//                }
-//            }
-//        }
-//        return this.time;
-//    }
-
-//    public static void main(String[] args) {
-//        Float testTime = "1,053.814";
-//    }
 }
