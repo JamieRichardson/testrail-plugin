@@ -29,7 +29,7 @@ public class Testcase {
     private Failure failure;
     private Skipped skipped;
     private JunitError junitError;
-    private Float time;
+    private String time;
     private String refs;
 
     @XmlAttribute
@@ -41,7 +41,7 @@ public class Testcase {
     @XmlElement(name = "error")
     public void setJunitError(JunitError junitError) { this.junitError = junitError; }
     @XmlAttribute(name = "time")
-    public void setTime(Float time) { this.time = time; }
+    public void setTime(String time) { this.time = time; }
     @XmlAttribute(name = "refs")
     public void setRefs(String refs) { this.refs = refs; }
 
@@ -49,6 +49,43 @@ public class Testcase {
     public Failure getFailure() { return this.failure; }
     public Skipped getSkipped() { return this.skipped; }
     public JunitError getJunitError() { return this.junitError; }
-    public Float getTime() { return this.time; }
-    public String getRefs() { return this.refs; }
+
+    public String getTime() {
+        return this.time.replace(",", "");
+    }
+
+    public String getRefs() {
+        return this.refs;
+    }
+
+
+//    public static void main(String[] args) {
+//        Testcase tc = new Testcase();
+//        tc.setTime("1,075.732");
+//        //tc.getElapsedTimeString
+//        Result jr = new Result(123, CaseStatus.FAILED, "", tc.getTime());
+//        System.out.println(jr.getElapsedTimeString());
+//    }
+
+
+//    public String cleanTimeFormat(String time) {
+//        String timeToClean = time;
+//        if (timeToClean !=null) {
+//            timeToClean.replace(",", "");
+//            try {
+//                return Float.parseFloat(timeToClean);
+//            } catch (NumberFormatException e) {
+//                try {
+//                    return new DecimalFormat().parse(timeToClean).floatValue();
+//                } catch (ParseException x) {
+//                    return 0.0f;
+//                }
+//            }
+//        }
+//        return this.time;
+//    }
+
+//    public static void main(String[] args) {
+//        Float testTime = "1,053.814";
+//    }
 }

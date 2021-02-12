@@ -24,10 +24,10 @@ package org.jenkinsci.plugins.testrail.TestRailObjects;
 public class Result {
     private int caseId;
     private CaseStatus status;
-    private Float elapsed;
+    private String elapsed;
     private String comment;
 
-    public Result(int caseId, CaseStatus status, String comment, Float elapsed) {
+    public Result(int caseId, CaseStatus status, String comment, String elapsed) {
         this.caseId = caseId;
         this.status = status;
         this.comment = comment;
@@ -36,17 +36,16 @@ public class Result {
 
     public void setCaseId(int caseId) { this.caseId = caseId; }
     public void setStatus(CaseStatus status) { this.status = status; }
-    public void setElapsed(float timeInSeconds) { this.elapsed = timeInSeconds; }
+    //public void setElapsed(float timeInSeconds) { this.elapsed = timeInSeconds; }
     public void setComment(String comment) { this.comment = comment; }
 
     public int getCaseId() { return this.caseId; }
     public CaseStatus getStatus() { return this.status; }
-    public Float getElapsed() { return this.elapsed; }
+    public String getElapsed() { return this.elapsed; }
     public String getComment() { return this.comment; }
 
     public String getElapsedTimeString() {
-        int time = (elapsed == null || elapsed.intValue() == 0) ? 1 : elapsed.intValue();
-
+        String time = (elapsed == null || elapsed.startsWith("0")) ? "1" : elapsed;
         return time + "s";
     }
 }
