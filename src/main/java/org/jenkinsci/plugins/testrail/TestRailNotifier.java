@@ -250,7 +250,7 @@ public class TestRailNotifier extends Notifier implements SimpleBuildStep {
                 }
                 if (addResult) {
                     CaseStatus caseStatus;
-                    Float caseTime = testcase.getTime();
+                    String caseTime = testcase.getTime();
                     String caseComment = null;
                     Failure caseFailure = testcase.getFailure();
                     JunitError caseJunitError = testcase.getJunitError();
